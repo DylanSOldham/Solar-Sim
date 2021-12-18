@@ -1,19 +1,13 @@
-#IMPORTS
-
 from vpython import *
 from astropy.time import Time
 from astroquery.jplhorizons import Horizons
 
-
-#INFORMATION
-
-#Global User Variables
 trail = True
 simRate = 10000
         
 #Simulation Time
 t = 0
-dt = 1000
+dt = 10
 
 #scale factor between graphics and actual numbers
 scale = 10**10
@@ -38,7 +32,7 @@ def getObject(identifier, name, radius, mass, col):
     o = Horizons(id=identifier, location="@sun", epochs=Time("2020-01-01").jd, id_type='id').vectors()
     obj = sphere(color=col, make_trail=trail)
     obj.name = name
-    obj.mass = mass 
+    obj.mass = mass
     obj.realpos = vec(o['x'], o['z'], o['y'])
     obj.realpos *= 1.5*10**11
     obj.pos = obj.realpos/scale
@@ -59,23 +53,18 @@ getObject(4, 'Mars', 3389000, 6.417*10**23, vec(1, 0, 0)),
 getObject('Phobos', 'Phobos', 11000, 10658529896187200, vec(.4, .4, .4)),
 getObject('Deimos', 'Deimos', 6200, 1476188406600740, vec(.6, .6, .6)),
 getObject(5, 'Jupiter', 69911000, 1.898*10**27, vec(.8, .3, 0)),
+getObject(501,'Io', 1821300, 8.9*10**22, vec(.4, .4, .4)),
 getObject(6, 'Saturn', 58232000, 5.683*10**26, vec(.8, .8, .4)),
+getObject(606, 'Titan', 2575000, 1.35*10**23, vec(.5, .5, .3)),
 getObject(7, 'Uranus', 25362000, 8.681*10**25, vec(0, 1, .3)),
 getObject(8, 'Neptune', 24622000 ,1.024*10**26, vec(0, .3, 1))
 ]
 
-
-#Functions
-
-#Initialize the objects so that they are ready for simulation
-#this helps to eliminate redundant code in the instantiation of objects
+#Initialize the objects
 def initializeObjects(Array):
     for n in range(len(objects)):
         Array[n].force = vec(0,0,0)
         
-        #will later add things automaticaly such as position, mass, velocity, radius and such from a data query
-
-
 #Calculate the force of gravity
 def calculateGravForce(Array):
     for n in range(len(Array)):
@@ -85,11 +74,11 @@ def calculateGravForce(Array):
                 m = Array[i].mass
 
                 rVec = Array[i].realpos-Array[n].realpos
-                rHat = norm(rVec) #normalize to a unit vector
-                r    = mag(rVec) #make vector a scalar
+                rHat = norm(rVec)
+                r    = mag(rVec)
                 
                 if r == 0:
-                    raise Exception("Two objects are in the same position and gravity has become infinite! (divide by zero error)")
+                    raise Exception("Two objects are in the same position and gravity has become infinite!")
                     break
                 
                 fVec = (G*M*m)/(r**(2)) * rHat
@@ -115,7 +104,8 @@ def calculateMotion(Array):
 #Camera
 
 #Fix camera onto an object
-scene.camera.follow(objects[3])
+followedObject = 3
+scene.camera.follow(objects[followedObject])
 
 #Debug
 
@@ -125,10 +115,19 @@ scene.camera.follow(objects[3])
 #Initialize objects
 initializeObjects(objects)
 
-#LOOP
+#Keyboard Callback
 
-g1 = graph()
-f1 = gcurve(fast=True,color=color.blue)
+def keyInput(e):
+    if (e.key == 'z'):
+        global followedObject
+        followedObject += 1
+        followedObject = followedObject%len(objects)
+        scene.camera.follow(objects[followedObject])
+        print("Now following " + objects[followedObject].name)
+
+scene.bind('keydown', keyInput)
+
+#LOOP
 
 while True:
     rate(simRate)
