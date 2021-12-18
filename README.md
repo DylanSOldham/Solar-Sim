@@ -9,7 +9,7 @@ Position and velocity data is queried from JPL Horizons. The initial position an
 Masses of the planets and moons cannot be queried from JPL Horizons, so I added them manually.
 
 The following dependencies need to be installed to run the program:\
-Astroquery: Instructions at https://github.com/astropy/astroquery\
+Astroquery: Instructions at https://github.com/astropy/astroquery \
 VPython: You can just `pip install vpython`
 
 Controls:\
