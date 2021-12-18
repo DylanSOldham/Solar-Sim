@@ -27,7 +27,8 @@ sun = sphere(
  color = vec(1,1,0), 
  make_trail = trail
  )
-       
+
+ 
 def getObject(identifier, name, radius, mass, col):
     o = Horizons(id=identifier, location="@sun", epochs=Time("2020-01-01").jd, id_type='id').vectors()
     obj = sphere(color=col, make_trail=trail)
@@ -42,7 +43,7 @@ def getObject(identifier, name, radius, mass, col):
     obj.radius = radius/scale
     return obj
 
-#Objects Array [syntax :: getObject(JPL id, name, radius, mass, color)]
+#Objects Array [Use getObject(JPL id, name, radius, mass, color)]
 objects = [
 sun, 
 getObject(1, 'Mercury', 243900, 7.2*10**23, vec(.66, .33, 0)),
@@ -117,13 +118,30 @@ initializeObjects(objects)
 
 #Keyboard Callback
 
-def keyInput(e):
-    if (e.key == 'z'):
+def updateFollowedObject():
         global followedObject
-        followedObject += 1
+
         followedObject = followedObject%len(objects)
         scene.camera.follow(objects[followedObject])
         print("Now following " + objects[followedObject].name)
+
+
+def keyInput(e):
+
+    global dt
+    global followedObject
+
+    if (e.key == 'left'):
+        followedObject += 1
+        updateFollowedObject()
+    if (e.key == 'right'):
+        followedObject -= 1
+        updateFollowedObject()
+    
+    if (e.key == 'up'):
+        dt *= 1.5
+    if (e.key == 'down'):
+        dt *= 1/1.5
 
 scene.bind('keydown', keyInput)
 
