@@ -4,7 +4,7 @@
 
 Simple simulation of major bodies of the solar system using Euler's method, including the 8 planets and several moons.
 
-Position and velocity data is grabbed at runtime from JPL Horizons. The initial position and velocities of all the simulated bodies are at the accurate positions from January 1, 2020. Of course, error accumulates over time, and the simulation becomes less accurate to reality as it runs, especially at higher timescales.
+Position and velocity data is grabbed at runtime from JPL Horizons. The initial position and velocities of all the simulated bodies are at the accurate positions from January 1, 2020. Of course, error accumulates over time, and the simulation becomes less accurate to reality as it runs, especially when ran at a faster speed.
 
 Masses of the planets and moons cannot be queried from JPL Horizons, so I added them manually.
 
