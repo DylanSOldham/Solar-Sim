@@ -2,7 +2,9 @@
 
 ![overview](https://user-images.githubusercontent.com/73968949/146631939-b9c9aebc-1b62-4b26-b603-0a33e2753a76.png)
 
-Simple simulation of major bodies of the solar system using Euler's method, including the 8 planets and several moons.
+Simple simulation of major bodies of the solar system using Euler's method, including the 8 planets and several moons. 
+
+This project was created with 2 other people for a physics class. Most of the programming was my job, except for the controls.
 
 Position and velocity data is grabbed at runtime from JPL Horizons. The initial position and velocities of all the simulated bodies are at the accurate positions from January 1, 2020. Of course, error accumulates over time, and the simulation becomes less accurate to reality as it runs, especially when ran at a faster speed.
 
